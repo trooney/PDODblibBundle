@@ -19,7 +19,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace PDODblibBundle\Doctrine\DBAL\Driver\PDODblib;
+namespace Doctrine\DBAL\Driver\PDODblib;
 
 /**
  * The PDO-based Dblib driver.
@@ -59,19 +59,20 @@ class Driver implements \Doctrine\DBAL\Driver
 		if (isset($params['dbname'])) {
             $dsn .= ';dbname=' .  $params['dbname'];
 		}
-
         return $dsn;
     }
 
 
     public function getDatabasePlatform()
     {
-        return new \Doctrine\DBAL\Platforms\MsSqlPlatform();
+        //return new \Doctrine\DBAL\Platforms\MsSqlPlatform();
+	    return new \Doctrine\DBAL\Platforms\SQLServer2005Platform();
     }
 
     public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
     {
-        return new \Doctrine\DBAL\Schema\MsSqlSchemaManager($conn);
+        //return new \Doctrine\DBAL\Schema\MsSqlSchemaManager($conn);
+	    return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
     }
 
     public function getName()
