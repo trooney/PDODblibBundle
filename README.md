@@ -19,15 +19,6 @@ final class DriverManager
 }
 ```
 
-In your Symfony2 project, modify your `config.yml` as follows:
-
-```yml
-# Doctrine Configuration
-doctrine:
-    dbal:
-        driver_class:   PDODblibBundle\Doctrine\DBAL\Driver\PDODblib\Driver
-```
-
 PHP pdo_dblib patch
 ===================
 
@@ -38,3 +29,47 @@ http://svn.php.net/viewvc/php/php-src/trunk/ext/pdo_dblib/dblib_driver.c?view=lo
 See:
 Revision 300647 - lastInsertId
 Revision 300628 - transaction support
+
+FreeTDS configuration
+=====================
+
+DBLib requires FreeTDS. We can't go into detail about configuring FreeTDS, but the connection configured should look something like following:
+
+```
+[mssql_freetds]
+    host = 172.30.252.25
+    port = 1433
+    tds version = 8.0
+    client charset = UTF-8
+    text size = 20971520
+
+```
+
+Setting up bundle in Symfony
+============================
+
+In your Symfony2 project, modify your `config.yml` as follows to use the DBlib bundle and the server setup under FreeTDS:
+
+```yml
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver_class:   PDODblibBundle\Doctrine\DBAL\Driver\PDODblib\Driver
+        host:           mssql_freetds
+
+```
+
+
+Putting everything together
+===========================
+
+Getting everything together wasn't easy. You need to complete the following steps, checking each installation is successful by connecting with the appropriate tools:
+
+* Install FreeTDS and configure a server connection 
+    * *Verify* with ./tsql -S mssql_freetds -U yourusername -P yourpassword
+* Install the PHP DBLib extension -- verify with PHP script containing 
+    * *Verify* $pdo = new PDO('dblib:host=mssql_freetds;dbname=yourdb', 'yourusername', 'yourpassword');
+* Install and configure the PDODblibBundle 
+    * *Verify* Some kind of SQL against your database
+
+
