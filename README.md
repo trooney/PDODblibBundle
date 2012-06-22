@@ -7,29 +7,6 @@ This bundle requires the following:
 * pdo_dblib
 * FreeTDS
 
-Since Doctrine 2 not allow you to add custom database drivers on the fly, if you want to test this package, `Doctrine/DBAL/Driver/DriverManager::$_driverMap` as follows:
-
-```php
-final class DriverManager
-{
-    private static $_driverMap = array(
-		/* ... snip ... */
-        'pdo_dblib' => 'Doctrine\DBAL\Driver\PDODblib\Driver',
-    );
-}
-```
-
-PHP pdo_dblib patch
-===================
-
-You can find a patch for some of the short-comings of pdo_dblib on SVN.
-
-http://svn.php.net/viewvc/php/php-src/trunk/ext/pdo_dblib/dblib_driver.c?view=log
-
-See:
-Revision 300647 - lastInsertId
-Revision 300628 - transaction support
-
 FreeTDS configuration
 =====================
 
@@ -59,6 +36,12 @@ doctrine:
 
 ```
 
+And in your `autoload.php` register the new bundle:
+```php
+$loader->registerNamespaces(array(
+    'PDODblib'         => __DIR__ . '/../vendor/bundles',
+));
+```
 
 Putting everything together
 ===========================
@@ -71,5 +54,40 @@ Getting everything together wasn't easy. You need to complete the following step
     * *Verify* $pdo = new PDO('dblib:host=mssql_freetds;dbname=yourdb', 'yourusername', 'yourpassword');
 * Install and configure the PDODblibBundle 
     * *Verify* Some kind of SQL against your database
+
+
+FYI - PHP pdo_dblib patch
+=========================
+
+You can find a patch for some of the short-comings of pdo_dblib on SVN.
+
+http://svn.php.net/viewvc/php/php-src/trunk/ext/pdo_dblib/dblib_driver.c?view=log
+
+See:
+Revision 300647 - lastInsertId
+Revision 300628 - transaction support
+
+FYI - Doctrine Test Suite
+=========================
+
+Doctrine2's test suite does not allow you to add database drivers on the fly. If you want to test this package, modify `Doctrine/DBAL/Driver/DriverManager::$_driverMap` as follows:
+
+```php
+final class DriverManager
+{
+    private static $_driverMap = array(
+		/* ... snip ... */
+        'pdo_dblib' => 'Doctrine\DBAL\Driver\PDODblib\Driver',
+    );
+}
+```
+
+FYI - Generating Entities from database
+=======================================
+
+It's possible, but not easy. Here's what I did:
+
+- Map any non-compatible column types to string
+- Hack the Doctrine core to skip any tables without primary keys
 
 
