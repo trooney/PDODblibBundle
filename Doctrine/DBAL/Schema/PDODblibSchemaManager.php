@@ -19,6 +19,8 @@
 
 namespace PDODblibBundle\Doctrine\DBAL\Schema;
 
+use Doctrine\DBAL\Types\Type;
+
 /**
  * The PDO-based Dblib schema manager.
  *
@@ -34,7 +36,15 @@ class PDODblibSchemaManager extends \Doctrine\DBAL\Schema\MsSqlSchemaManager {
         foreach ($tableColumn as $key => $value) {
             $tableColumn[strtoupper($key)] = $value;
         }
-        return parent::_getPortableTableColumnDefinition($tableColumn);
+
+        $column = parent::_getPortableTableColumnDefinition($tableColumn);
+
+        // for identity columns sybase returns numeric, but should be integer...
+        if ($column->getAutoincrement() && false !== strpos(strtolower($tableColumn['TYPE_NAME']), 'numeric')) {
+            $column->setType(Type::getType(TYPE::INTEGER));
+        }
+
+        return $column;
     }
 
 }
