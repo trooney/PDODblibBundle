@@ -75,7 +75,7 @@ class Driver implements \Doctrine\DBAL\Driver {
 		}
 
 		if (class_exists('\\Doctrine\\DBAL\\Schema\\MsSqlSchemaManager')) {
-			return new \Doctrine\DBAL\Schema\MsSqlSchemaManager($conn);
+			return new \PDODblibBundle\Doctrine\DBAL\Schema\PDODblibSchemaManager($conn);
 		}
 
 
