@@ -1,0 +1,16 @@
+{
+    "name": "trooney/pdodblib-bundle",
+    "description": "PDO DBlib Driver for Symfony",
+    "keywords": ["pdo", "dblib", "symfony"]
+    "version": "0.2.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "PDODblibBundle": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "minimum-stability": "stable"
+}
