@@ -1,7 +1,7 @@
 {
     "name": "trooney/pdodblib-bundle",
     "description": "PDO DBlib Driver for Symfony",
-    "keywords": ["pdo", "dblib", "symfony"]
+    "keywords": ["pdo", "dblib", "symfony"],
     "version": "0.2.0",
     "license": "MIT",
     "autoload": {
