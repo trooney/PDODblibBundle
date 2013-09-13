@@ -1,7 +1,7 @@
 PDODblibBundle
 --------------
 
-Doctrine 2 does support any method of connecting to SQL Server on a Linux box. Here's a simple driver that supports PDO DBlib. Many tests fail, but most are related to shortcomings of the PDODBlib driver. There is a patch in the PHP repo to add transaction and lastInsertId support, but this package has some minor work arounds.
+This PDO DBLib bundle adds support for Microsoft SQL Server Doctrine 2. Take it with a grain of salt: Many of the Doctrine unit tests fail when using this driver. PHP's PDO_DBLIB driver does not support many of the features within doctrine. There is a patch in the PHP repo to add transaction and lastInsertId support, but this package has some minor work arounds.
 
 This bundle requires the following:
 * pdo_dblib
@@ -14,7 +14,7 @@ DBLib requires FreeTDS. We can't go into detail about configuring FreeTDS, but t
 
 ```
 [mssql_freetds]
-    host = 172.30.252.25
+    host = 192.168.1.1
     port = 1433
     tds version = 8.0
     client charset = UTF-8
@@ -50,8 +50,10 @@ Getting everything together wasn't easy. You need to complete the following step
 
 * Install FreeTDS and configure a server connection 
     * *Verify* with ./tsql -S mssql_freetds -U yourusername -P yourpassword
+    
 * Install the PHP DBLib extension -- verify with PHP script containing 
     * *Verify* $pdo = new PDO('dblib:host=mssql_freetds;dbname=yourdb', 'yourusername', 'yourpassword');
+    
 * Install and configure the PDODblibBundle 
     * *Verify* Some kind of SQL against your database
 
@@ -70,7 +72,7 @@ Revision 300628 - transaction support
 FYI - Doctrine Test Suite
 =========================
 
-Doctrine2's test suite does not allow you to add database drivers on the fly. If you want to test this package, modify `Doctrine/DBAL/Driver/DriverManager::$_driverMap` as follows:
+Doctrine2's test suite does not allow you to add database drivers on the fly. If you want to test this package, modify `Doctrine/DBAL/Driver/DriverManager::$_driverMap`:
 
 ```php
 final class DriverManager
